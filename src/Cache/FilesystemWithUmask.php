@@ -1,5 +1,5 @@
 <?php
-namespace SD\TwigBridge\Cache;
+namespace SD\Twig\Cache;
 
 use Twig_Cache_Filesystem;
 
