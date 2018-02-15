@@ -1,11 +1,11 @@
 {
-    "name": "ob-ivan/sd-twig-bridge",
+    "name": "ob-ivan/sd-twig",
     "config": {
         "sort-packages": true
     },
     "autoload": {
         "psr-4": {
-            "SD\\TwigBridge\\": "src/"
+            "SD\\Twig\\": "src/"
         }
     }
 }
