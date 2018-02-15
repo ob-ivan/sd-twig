@@ -7,5 +7,9 @@
         "psr-4": {
             "SD\\Twig\\": "src/"
         }
+    },
+    "require": {
+        "ob-ivan/sd-dependency-injection": "^1.6",
+        "twig/twig": "^2.4"
     }
 }
