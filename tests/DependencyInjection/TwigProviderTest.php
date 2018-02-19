@@ -2,6 +2,7 @@
 namespace tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
+use SD\DependencyInjection\Container;
 use SD\Twig\DependencyInjection\TwigProvider;
 
 class TwigProviderTest extends TestCase
@@ -25,7 +26,7 @@ class TwigProviderTest extends TestCase
                             'extra' => $extra,
                         ],
                         'paths' => [
-                            $namespace => $namespacePaths,
+                            $namespace => $namespaceRelativePaths,
                         ],
                     ],
                 ],

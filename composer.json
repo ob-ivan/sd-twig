@@ -8,7 +8,13 @@
             "SD\\Twig\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "tests/"
+        }
+    },
     "require": {
+        "ob-ivan/sd-config": "^1.1",
         "ob-ivan/sd-dependency-injection": "^1.6",
         "twig/twig": "^2.4"
     },
