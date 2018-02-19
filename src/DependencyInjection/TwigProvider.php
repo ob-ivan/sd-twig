@@ -6,6 +6,7 @@ use SD\Debug\IsDebugAwareTrait;
 use SD\DependencyInjection\AutoDeclarerInterface;
 use SD\DependencyInjection\AutoDeclarerTrait;
 use SD\DependencyInjection\ProviderInterface;
+use SD\Twig\Cache\FilesystemWithUmask;
 use SD\Twig\Loader\FilesystemWithExtension;
 use Twig_Environment;
 
@@ -22,8 +23,19 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
 
     public function provide()
     {
+        return new Twig_Environment(
+            $this->getLoader(),
+            [
+                'debug' => $this->getIsDebug(),
+                'cache' => $this->getCache(),
+            ]
+        );
+    }
+
+    private function getLoader()
+    {
         $config = $this->getConfig('twig');
-        $loaderConfig = $config['loader'];
+        $loaderConfig = $config['loader'] ?? [];
         $loaderClass = $loaderConfig['class'] ?? FilesystemWithExtension::class;
         $loaderArgs = array_values($loaderConfig['args'] ?? []);
         $loader = new $loaderClass(...$loaderArgs);
@@ -33,11 +45,18 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
                 $loader->addPath($path, $namespace);
             }
         }
-        return new Twig_Environment(
-            $loader,
-            [
-                'debug' => $this->getIsDebug(),
-            ]
-        );
+        return $loader;
+    }
+
+    private function getCache()
+    {
+        $config = $this->getConfig('twig');
+        $cacheConfig = $config['cache'] ?? [];
+        if (!$cacheConfig) {
+            return false;
+        }
+        $cacheClass = $cacheConfig['class'] ?? FilesystemWithUmask::class;
+        $cachePath = $cacheConfig['path'] ?? '';
+        return new $cacheClass($cachePath);
     }
 }
