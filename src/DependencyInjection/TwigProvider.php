@@ -70,11 +70,16 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
 
     private function getExtensions()
     {
+        $extensions = [];
         $config = $this->getConfig('twig');
         $extensionsConfig = $config['extensions'] ?? [];
-        $extensions = [];
         foreach ($extensionsConfig as $extensionClass) {
             $extensions[] = $this->getContainer()->produce($extensionClass);
+        }
+        $extensionFactoriesConfig = $config['extension_factories'] ?? [];
+        foreach ($extensionFactoriesConfig as $extensionFactoryClass) {
+            $factory = $this->getContainer()->produce($extensionFactoryClass);
+            $extensions = array_merge($extensions, $factory->getExtensions());
         }
         return $extensions;
     }
