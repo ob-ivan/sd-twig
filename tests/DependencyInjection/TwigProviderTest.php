@@ -107,4 +107,31 @@ class TwigProviderTest extends TestCase
         $this->assertInstanceOf($cacheClass, $cache, 'MUST return instance of provided cache class');
         $this->assertEquals("$rootDir/$path", $cache->getPath(), 'MUST prepend root dir before cache path');
     }
+
+    public function testProvideExtensions()
+    {
+        $extensionClass = MockExtension::class;
+        $container = new Container([
+            'isDebug' => false,
+            'rootDir' => __DIR__,
+            'config' => [
+                'twig' => [
+                    'extensions' => [
+                        $extensionClass,
+                    ],
+                ],
+            ],
+        ]);
+        $container->connect(new TwigProvider());
+        $environment = $container->get('twig');
+        $contains = false;
+        foreach ($environment->getExtensions() as $extension) {
+            if ($extension instanceof $extensionClass) {
+                $contains = true;
+                break;
+            }
+        }
+        $this->assertTrue($contains, 'MUST contain extension provided from config');
+        $this->assertSame($container, $extension->getContainer(), 'MUST inject dependencies into extensions');
+    }
 }
