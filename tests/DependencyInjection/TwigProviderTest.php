@@ -23,12 +23,10 @@ class TwigProviderTest extends TestCase
                 'twig' => [
                     'loader' => [
                         'class' => $loaderClass,
-                        'args' => [
-                            'path' => $relativePath,
-                            'rootDir' => '',
-                            'extra' => [
-                                $extra,
-                            ],
+                        'path' => $relativePath,
+                        'rootDir' => '',
+                        'extra' => [
+                            $extra,
                         ],
                         'paths' => [
                             $namespace => $namespaceRelativePaths,

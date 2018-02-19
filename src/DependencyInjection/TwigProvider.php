@@ -45,11 +45,10 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
         $config = $this->getConfig('twig');
         $loaderConfig = $config['loader'] ?? [];
         $loaderClass = $loaderConfig['class'] ?? FilesystemWithExtension::class;
-        $loaderArgs = $loaderConfig['args'] ?? [];
         $loader = new $loaderClass(
-            $loaderArgs['path'] ?? '',
-            $this->getRootDir() . '/' . ($loaderArgs['rootDir'] ?? ''),
-            ...array_values($loaderArgs['extra'] ?? [])
+            $loaderConfig['path'] ?? '',
+            $this->getRootDir() . '/' . ($loaderConfig['rootDir'] ?? ''),
+            ...array_values($loaderConfig['extra'] ?? [])
         );
         $paths = $loaderConfig['paths'] ?? [];
         foreach ($paths as $namespace => $namespacePaths) {
