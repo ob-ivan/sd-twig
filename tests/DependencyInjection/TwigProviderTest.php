@@ -134,4 +134,29 @@ class TwigProviderTest extends TestCase
         $this->assertTrue($contains, 'MUST contain extension provided from config');
         $this->assertSame($container, $extension->getContainerPublic(), 'MUST inject dependencies into extensions');
     }
+
+    public function testProvideExtensionFactories()
+    {
+        $container = new Container([
+            'isDebug' => false,
+            'rootDir' => __DIR__,
+            'config' => [
+                'twig' => [
+                    'extension_factories' => [
+                        MockExtensionFactory::class,
+                    ],
+                ],
+            ],
+        ]);
+        $container->connect(new TwigProvider());
+        $environment = $container->get('twig');
+        $contains = false;
+        foreach ($environment->getExtensions() as $extension) {
+            if ($extension instanceof MockExtension) {
+                $contains = true;
+                break;
+            }
+        }
+        $this->assertTrue($contains, 'MUST contain extension provided from factory');
+    }
 }
