@@ -24,6 +24,12 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
         $loaderClass = $loaderConfig['class'];
         $loaderArgs = array_values($loaderConfig['args']);
         $loader = new $loaderClass(...$loaderArgs);
+        $paths = $loaderConfig['paths'];
+        foreach ($paths as $namespace => $namespacePaths) {
+            foreach ($namespacePaths as $path) {
+                $loader->addPath($path, $namespace);
+            }
+        }
         return new Twig_Environment($loader);
     }
 }

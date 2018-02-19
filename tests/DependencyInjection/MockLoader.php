@@ -12,4 +12,9 @@ class MockLoader extends Twig_Loader_Filesystem
         parent::__construct($paths, $rootPath);
         $this->extra = $extra;
     }
+
+    public function getExtra()
+    {
+        return $this->extra;
+    }
 }

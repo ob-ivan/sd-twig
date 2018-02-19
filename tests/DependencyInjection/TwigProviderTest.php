@@ -4,17 +4,18 @@ namespace tests\DependencyInjection;
 use PHPUnit\Framework\TestCase;
 use SD\DependencyInjection\Container;
 use SD\Twig\DependencyInjection\TwigProvider;
+use Twig_Environment;
 
 class TwigProviderTest extends TestCase
 {
     public function testProvideLoader()
     {
         $loaderClass = MockLoader::class;
-        $relativePath = 'path/to/templates';
+        $relativePath = 'templates';
         $rootDir = __DIR__;
         $extra = mt_rand();
         $namespace = 'someNamespace';
-        $namespaceRelativePaths = ['a', 'b', 'c'];
+        $namespaceRelativePaths = ['templates'];
         $container = new Container([
             'config' => [
                 'twig' => [
@@ -38,9 +39,9 @@ class TwigProviderTest extends TestCase
         $loader = $environment->getLoader();
         $this->assertInstanceOf($loaderClass, $loader, 'MUST return instance of provided loader class');
         $this->assertEquals(
-            [$rootDir . '/' . $relativePath],
+            [$relativePath],
             $loader->getPaths(),
-            'MUST set path for main namespace from constructor AND prepend root directory'
+            'MUST set path for main namespace from constructor'
         );
         $this->assertEquals(
             $extra,
@@ -48,14 +49,9 @@ class TwigProviderTest extends TestCase
             'MUST pass extra parameters from config'
         );
         $this->assertEquals(
-            array_map(
-                function ($relativePath) use ($rootDir) {
-                    return $rootDir . '/' . $relativePath;
-                },
-                $namespaceRelativePaths
-            ),
+            $namespaceRelativePaths,
             $loader->getPaths($namespace),
-            'MUST set paths for custom namespace from config AND prepend root directory'
+            'MUST set paths for custom namespace from config'
         );
     }
 }
