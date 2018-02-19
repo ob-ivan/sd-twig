@@ -17,6 +17,7 @@ class TwigProviderTest extends TestCase
         $namespace = 'someNamespace';
         $namespaceRelativePaths = ['templates'];
         $container = new Container([
+            'isDebug' => false,
             'config' => [
                 'twig' => [
                     'loader' => [
@@ -53,5 +54,31 @@ class TwigProviderTest extends TestCase
             $loader->getPaths($namespace),
             'MUST set paths for custom namespace from config'
         );
+    }
+
+    /**
+     * @dataProvider provideIsDebugDataProvider
+    **/
+    public function testProvideIsDebug(bool $isDebug)
+    {
+        $container = new Container([
+            'isDebug' => $isDebug,
+            'config' => [],
+        ]);
+        $container->connect(new TwigProvider());
+        $environment = $container->get('twig');
+        $this->assertEquals($isDebug, $environment->isDebug(), 'MUST set debug value from config');
+    }
+
+    public function provideIsDebugDataProvider()
+    {
+        return [
+            [
+                'isDebug' => false,
+            ],
+            [
+                'isDebug' => true,
+            ],
+        ];
     }
 }
