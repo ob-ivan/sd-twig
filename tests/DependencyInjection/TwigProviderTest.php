@@ -132,6 +132,6 @@ class TwigProviderTest extends TestCase
             }
         }
         $this->assertTrue($contains, 'MUST contain extension provided from config');
-        $this->assertSame($container, $extension->getContainer(), 'MUST inject dependencies into extensions');
+        $this->assertSame($container, $extension->getContainerPublic(), 'MUST inject dependencies into extensions');
     }
 }

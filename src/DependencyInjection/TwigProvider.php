@@ -6,6 +6,7 @@ use SD\Config\RootDirAwareTrait;
 use SD\Debug\IsDebugAwareTrait;
 use SD\DependencyInjection\AutoDeclarerInterface;
 use SD\DependencyInjection\AutoDeclarerTrait;
+use SD\DependencyInjection\ContainerAwareTrait;
 use SD\DependencyInjection\ProviderInterface;
 use SD\Twig\Cache\FilesystemWithUmask;
 use SD\Twig\Loader\FilesystemWithExtension;
@@ -15,6 +16,7 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
 {
     use AutoDeclarerTrait;
     use ConfigAwareTrait;
+    use ContainerAwareTrait;
     use IsDebugAwareTrait;
     use RootDirAwareTrait;
 
@@ -25,13 +27,17 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
 
     public function provide()
     {
-        return new Twig_Environment(
+        $environment = new Twig_Environment(
             $this->getLoader(),
             [
                 'debug' => $this->getIsDebug(),
                 'cache' => $this->getCache(),
             ]
         );
+        foreach ($this->getExtensions() as $extension) {
+            $environment->addExtension($extension);
+        }
+        return $environment;
     }
 
     private function getLoader()
@@ -60,5 +66,16 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
         $cacheClass = $cacheConfig['class'] ?? FilesystemWithUmask::class;
         $cachePath = $cacheConfig['path'] ?? '';
         return new $cacheClass("{$this->getRootDir()}/$cachePath");
+    }
+
+    private function getExtensions()
+    {
+        $config = $this->getConfig('twig');
+        $extensionsConfig = $config['extensions'] ?? [];
+        $extensions = [];
+        foreach ($extensionsConfig as $extensionClass) {
+            $extensions[] = $this->getContainer()->produce($extensionClass);
+        }
+        return $extensions;
     }
 }
