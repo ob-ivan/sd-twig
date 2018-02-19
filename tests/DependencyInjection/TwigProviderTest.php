@@ -18,6 +18,7 @@ class TwigProviderTest extends TestCase
         $namespaceRelativePaths = ['templates'];
         $container = new Container([
             'isDebug' => false,
+            'rootDir' => $rootDir,
             'config' => [
                 'twig' => [
                     'loader' => [
@@ -63,6 +64,7 @@ class TwigProviderTest extends TestCase
     {
         $container = new Container([
             'isDebug' => $isDebug,
+            'rootDir' => __DIR__,
             'config' => [],
         ]);
         $container->connect(new TwigProvider());

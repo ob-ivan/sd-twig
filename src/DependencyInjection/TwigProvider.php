@@ -2,6 +2,7 @@
 namespace SD\Twig\DependencyInjection;
 
 use SD\Config\ConfigAwareTrait;
+use SD\Config\RootDirAwareTrait;
 use SD\Debug\IsDebugAwareTrait;
 use SD\DependencyInjection\AutoDeclarerInterface;
 use SD\DependencyInjection\AutoDeclarerTrait;
@@ -15,6 +16,7 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
     use AutoDeclarerTrait;
     use ConfigAwareTrait;
     use IsDebugAwareTrait;
+    use RootDirAwareTrait;
 
     public function getServiceName(): string
     {
@@ -57,6 +59,6 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
         }
         $cacheClass = $cacheConfig['class'] ?? FilesystemWithUmask::class;
         $cachePath = $cacheConfig['path'] ?? '';
-        return new $cacheClass($cachePath);
+        return new $cacheClass("{$this->getRootDir()}/$cachePath");
     }
 }
