@@ -7,7 +7,7 @@ class FilesystemWithExtension extends Twig_Loader_Filesystem
 {
     private $extension;
 
-    public function __construct($paths = array(), $rootPath = null, $extension = null)
+    public function __construct($paths = array(), $rootPath = null, $extension = '.twig')
     {
         parent::__construct($paths, $rootPath);
         $this->extension = $extension;
