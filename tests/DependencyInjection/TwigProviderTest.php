@@ -14,8 +14,10 @@ class TwigProviderTest extends TestCase
         $relativePath = 'templates';
         $rootDir = __DIR__;
         $extra = mt_rand();
-        $namespace = 'someNamespace';
-        $namespaceRelativePaths = ['templates'];
+        $namespaceArray = 'namespaceArray';
+        $namespaceArrayPaths = ['templates'];
+        $namespaceString = 'namespaceString';
+        $namespaceStringPaths = 'templates';
         $container = new Container([
             'isDebug' => false,
             'rootDir' => $rootDir,
@@ -29,7 +31,8 @@ class TwigProviderTest extends TestCase
                             $extra,
                         ],
                         'paths' => [
-                            $namespace => $namespaceRelativePaths,
+                            $namespaceArray => $namespaceArrayPaths,
+                            $namespaceString => $namespaceStringPaths,
                         ],
                     ],
                 ],
@@ -51,9 +54,14 @@ class TwigProviderTest extends TestCase
             'MUST pass extra parameters from config'
         );
         $this->assertEquals(
-            $namespaceRelativePaths,
-            $loader->getPaths($namespace),
-            'MUST set paths for custom namespace from config'
+            $namespaceArrayPaths,
+            $loader->getPaths($namespaceArray),
+            'MUST set paths for custom namespace from array config'
+        );
+        $this->assertEquals(
+            [$namespaceStringPaths],
+            $loader->getPaths($namespaceString),
+            'MUST set paths for custom namespace from string config'
         );
     }
 

@@ -52,7 +52,7 @@ class TwigProvider implements AutoDeclarerInterface, ProviderInterface
         );
         $paths = $loaderConfig['paths'] ?? [];
         foreach ($paths as $namespace => $namespacePaths) {
-            foreach ($namespacePaths as $path) {
+            foreach ((array)$namespacePaths as $path) {
                 $loader->addPath($path, $namespace);
             }
         }
